@@ -1,18 +1,12 @@
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom';
 import MBTodo from './MBTodo';
-import { useState } from 'react';
+import { useLocalStorage } from '../hooks/useStorages';
 
 const CustomerTable = ({ customers }) => {
   const navigate = useNavigate()
-  const [filters, setFilters] = useState(() => {
-    const storageFilters = window.localStorage.getItem('customerTableFilters')
-    if (!storageFilters) {
-      return { isActive: 'None' }
-    }
-    return JSON.parse(storageFilters)
-  })
-  
+  const [filters, setFilters] = useLocalStorage('customerTableFilters', { isActive: 'None' })
+
   const clicker = (customer) => {
     navigate(customer.id);
   }
@@ -23,16 +17,7 @@ const CustomerTable = ({ customers }) => {
     if (value !== 'None') {
       value = value === 'true'
     }
-    
-    setFilters(prevState => {
-      const newFilters = {
-        ...prevState,
-        isActive: value
-      }
-      window.localStorage.setItem('customerTableFilters', JSON.stringify(newFilters))
-      return newFilters
-    })
-    
+    setFilters({ ...filters, isActive: value })
   }
 
   return (
