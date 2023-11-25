@@ -33,10 +33,10 @@ const NewCustomerContact = ({ customerId }) => {
       <div className="row">
           <div className="col d-flex align-items-start">
               <select className="form-select" name="exampleSelect" id="exampleSelect" value={selectedContactId} onChange={handleSelectChange}>
-                <option value='' selected={selectedContactId === ''}>Select customer contact</option>
+                <option value='' >Select customer contact</option>
                 {availableContacts.map((contact, idx) => {
                   return (
-                    <option key={idx} value={contact.id} selected={contact.id === selectedContactId}>
+                    <option key={idx} value={contact.id} >
                       {`${contact.firstName} ${contact.lastName}`}
                       </option>
                   )

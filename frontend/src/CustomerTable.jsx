@@ -38,7 +38,7 @@ const Table = ({ customers }) => {
                 className=''
                 onClick={() => clicker(customer)}
               >
-                <tr scope="row">{index + 1}</tr>
+                <td scope="row">{index + 1}</td>
                 <td>{customer.name}</td>
                 <td>{customer.country}</td>
                 <td>{customer.isActive ? '✅' : '❌'}</td>

@@ -28,10 +28,14 @@ routes.post('/api/customers', async (req, res) => {
   return res.send(customers)
 })
 
-// MB-TODO: Create route for updating customer
+// MB-TODO-DONE: Create route for updating customer
 routes.put('/api/customers/:customerId', async (req, res) => {
   const { customerId } = req.params
-  const customer = await Customers.update(customerId, req.body)
+  const body = {
+    ...req.body,
+    isActive: req.body.isActive === 'true'
+  }
+  const customer = await Customers.update(customerId, body)
   if (!customer) {
     throw new NotFound('Customer Not Found')
   }
@@ -58,14 +62,14 @@ routes.post('/api/contacts', async (req, res) => {
   return res.send(contacts)
 })
 
-// MB-TODO: Create route for fetching contacts of a customer `/api/customers/:customerId/contacts`
+// MB-TODO-DONE: Create route for fetching contacts of a customer `/api/customers/:customerId/contacts`
 routes.get('/api/customers/:customerId/contacts', async (req, res) => {
   const { customerId } = req.params
   const contacts = await CustomerContacts.getAll(customerId)
   return res.send(contacts)
 })
 
-// MB-TODO: Create route for adding contact to a customer `/api/customers/:customerId/contacts`
+// MB-TODO-DONE: Create route for adding contact to a customer `/api/customers/:customerId/contacts`
 routes.post('/api/customers/:customerId/contacts', async (req, res) => {
   const { customerId } = req.params
   const { contactId } = req.body
@@ -73,7 +77,7 @@ routes.post('/api/customers/:customerId/contacts', async (req, res) => {
   return res.send(contacts)
 })
 
-// MB-TODO:s Create route for deleting contact of customer `/api/customers/:customerId/contacts/:contactId`
+// MB-TODO-DONE:s Create route for deleting contact of customer `/api/customers/:customerId/contacts/:contactId`
 routes.delete('/api/customers/:customerId/contacts/:contactId', async (req, res) => {
   const { customerId, contactId } = req.params
   await CustomerContacts.delete(customerId, contactId)

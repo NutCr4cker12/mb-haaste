@@ -6,7 +6,7 @@ import routes from './routes.js'
 
 const app = express()
 
-// MB-TODO: What are middlewares in Express?
+// MB-TODO-DONE: What are middlewares in Express?
 // Middlewares in express are functions that are run before the actual route handler.
 // Middlewares have acces to the Request, Response (and error in case of error handler middleware)
 // that the middleware can alter.
@@ -14,7 +14,7 @@ const app = express()
 // (for example authentication, cors / security related middleware and error handlers are common usecases).
 // Route level middleware (for example authoriation)
 
-// MB-TODO: What these middlewares do?
+// MB-TODO-DONE: What these middlewares do?
 // parses incoming requests with JSON payloads so that the request.body is an JSON object
 app.use(express.json())
 // Parses the incoming request body into a object which is then accessible through req.body. The extended: true option ensures that the parsing can handle complex nested objects.

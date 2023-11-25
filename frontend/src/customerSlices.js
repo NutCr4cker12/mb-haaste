@@ -84,6 +84,35 @@ const customersSlice = createSlice({
           state.currentRequestId = null
         }
       })
+      .addCase(updateCustomer.pending, (state, action) => {
+        const { requestId } = action.meta
+        if(state.status === 'idle') {
+          state.status = 'pending'
+          state.currentRequestId = requestId
+        }
+      })
+      .addCase(updateCustomer.fulfilled, (state, action) => {
+        const { requestId } = action.meta
+        if(state.status === 'pending' && state.currentRequestId === requestId) {
+          state.status = 'idle'
+          console.log("Action data", state.data)
+          state.data = state.data.map(customer => {
+            if (customer.id !== action.payload.id) {
+              return customer
+            }
+            return action.payload
+          })
+          state.currentRequestId = null
+        }
+      })
+      .addCase(updateCustomer.rejected, (state, action) => {
+        const { requestId } = action.meta
+        if(state.status === 'pending' && state.currentRequestId === requestId) {
+          state.status = 'idle'
+          state.error = action.error
+          state.currentRequestId = null
+        }
+      })
   },
 })
 export const customerReducer = customersSlice.reducer
@@ -120,6 +149,15 @@ export const createCustomer = createAsyncThunk(
   'customers/create',
   async (data) => {
     const result = await client(`/api/customers`, { data, method: 'POST' })
+    return result
+  }
+)
+
+export const updateCustomer = createAsyncThunk(
+  'customer/update',
+  async (data) => {
+    const { id } = data
+    const result = await client(`/api/customers/${id}`, { data, method: 'PUT' })
     return result
   }
 )
