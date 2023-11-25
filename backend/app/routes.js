@@ -67,7 +67,8 @@ routes.get('/api/customers/:customerId/contacts', async (req, res) => {
 
 // MB-TODO: Create route for adding contact to a customer `/api/customers/:customerId/contacts`
 routes.post('/api/customers/:customerId/contacts', async (req, res) => {
-  const { customerId, contactId } = req.params
+  const { customerId } = req.params
+  const { contactId } = req.body
   const contacts = await CustomerContacts.add(customerId, contactId)
   return res.send(contacts)
 })

@@ -61,10 +61,8 @@ export const fetchCustomerContacts = createAsyncThunk(
 export const addCustomerContact = createAsyncThunk(
   'customerContacts/add',
   async (data) => {
-    const { customerId, contactId } = data;
-    console.log("Adding customer contant, ", customerId, contactId)
+    const { customerId } = data;
     const result = await client(`/api/customers/${customerId}/contacts`, { data, method: 'POST' })
-    console.log("Result: ", result)
     return result
   }
 )
