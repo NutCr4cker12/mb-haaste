@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 const NewCustomerContact = ({ customerId }) => {
   const dispatch = useDispatch()
   const [selectedContactId, setSelectedContactId] = useState('')
-  const { data: customerContacts } = useCustomerContacts(customerId)
+  const { data: customerContacts, status } = useCustomerContacts(customerId)
   const { data: contacts } = useContacts()
 
   const customerContactIds = customerContacts.map(n => n.contactId)
@@ -25,6 +25,7 @@ const NewCustomerContact = ({ customerId }) => {
     }
 
     dispatch(addCustomerContact({ customerId, contactId: selectedContactId }))
+    setSelectedContactId('')
   }
 
   return (
@@ -32,15 +33,22 @@ const NewCustomerContact = ({ customerId }) => {
       <div className="row">
           <div className="col d-flex align-items-start">
               <select className="form-select" name="exampleSelect" id="exampleSelect" value={selectedContactId} onChange={handleSelectChange}>
+                <option value='' selected={selectedContactId === ''}>Select customer contact</option>
                 {availableContacts.map((contact, idx) => {
                   return (
-                    <option key={idx} value={contact.id}>{`${contact.firstName} ${contact.lastName}`}</option>
+                    <option key={idx} value={contact.id} selected={contact.id === selectedContactId}>
+                      {`${contact.firstName} ${contact.lastName}`}
+                      </option>
                   )
                 })}
               </select>
           </div>
           <div className="col d-flex align-items-start">
-            <button className='btn btn-outline-primary' onClick={handleAddCustomerContact}>
+            <button 
+              className='btn btn-outline-primary' 
+              onClick={handleAddCustomerContact}
+              disabled={status === 'pending'}
+            >
               <i className="bi bi-plus" />
               {' '}
               Add customer contact

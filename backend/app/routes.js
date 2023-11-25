@@ -77,7 +77,7 @@ routes.post('/api/customers/:customerId/contacts', async (req, res) => {
 routes.delete('/api/customers/:customerId/contacts/:contactId', async (req, res) => {
   const { customerId, contactId } = req.params
   await CustomerContacts.delete(customerId, contactId)
-  return res.send(null)
+  return res.send({})
 })
 
 export default routes

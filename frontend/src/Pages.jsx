@@ -104,7 +104,7 @@ export const Customer = () => {
             <p className='fw-bold'>Customer contacts</p>
             <NewCustomerContact customerId={customerId} />
             <MBTodo
-              isCompleted={false}
+              isCompleted={true}
               task='Continue CustomerContact table implementation' />
             <CustomerContactTable customerId={customerId} />
           </div>

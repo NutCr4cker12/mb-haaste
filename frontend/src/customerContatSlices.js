@@ -60,6 +60,30 @@ const customerContactsSlice = createSlice({
           state.currentRequestId = null
         }
       })
+      .addCase(deleteCustomerContact.pending, (state, action) => {
+        const { requestId } = action.meta
+        if (state.status === 'idle') {
+          state.status = 'pending'
+          state.currentRequestId = requestId
+        }
+      })
+      .addCase(deleteCustomerContact.fulfilled, (state, action) => {
+        const { requestId } = action.meta
+        if (state.status === 'pending' && state.currentRequestId === requestId) {
+          const { customerId, contactId } = action.payload
+          state.status = 'idle'
+          state.data = state.data.filter(n => !(n.customerId === customerId && n.contactId === contactId))
+          state.currentRequestId = null
+        }
+      })
+      .addCase(deleteCustomerContact.rejected, (state, action) => {
+        const { requestId } = action.meta
+        if(state.status === 'pending' && state.currentRequestId === requestId) {
+          state.status = 'idle'
+          state.error = action.error
+          state.currentRequestId = null
+        }
+      })
   }
 })
 
@@ -84,9 +108,17 @@ export const fetchCustomerContacts = createAsyncThunk(
 export const addCustomerContact = createAsyncThunk(
   'customerContacts/add',
   async (data) => {
-    const { customerId } = data;
+    const { customerId } = data
     const result = await client(`/api/customers/${customerId}/contacts`, { data, method: 'POST' })
     return result
   }
 )
 
+export const deleteCustomerContact = createAsyncThunk(
+  'customerContacts/delete',
+  async (data) => {
+    const { customerId, contactId } = data
+    await client(`/api/customers/${customerId}/contacts/${contactId}`, { method: 'DELETE' })
+    return data
+  }
+)

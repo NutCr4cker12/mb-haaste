@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchCustomerContacts } from './customerContatSlices';
+import { deleteCustomerContact, fetchCustomerContacts } from './customerContatSlices';
+import { useContacts } from './Pages';
 
 export const useCustomerContacts = (customerId) => {
   const dispatch = useDispatch()
@@ -15,12 +16,25 @@ export const useCustomerContacts = (customerId) => {
 }
 
 const Table = ({ customerId }) => {
+  const dispatch = useDispatch()
   // MB-TODO-DONE: Example response
-  const { data: customerContacts , status, error, refetch } = useCustomerContacts(customerId)
+  const { data, status, error, refetch } = useCustomerContacts(customerId)
+  const { data: contacts } = useContacts()
+
   
+  const deleteContact = (contactId) => {
+    dispatch(deleteCustomerContact({ customerId, contactId }))
+    refetch()
+  }
+  
+  const customerContacts = data.map(n => ({
+    ...n,
+    contact: contacts.find(x => x.id === n.contactId)
+  }))
+
   // MB-TODO-DONE: Implement fetch customer's contacts
-  // MB-TODO: Implement add contact to customer
-  // MB-TODO: Implement remove contact of customer
+  // MB-TODO-DONE: Implement add contact to customer
+  // MB-TODO-DONE: Implement remove contact of customer
   return (
     <table className="table table-hover">
       <thead>
@@ -35,10 +49,12 @@ const Table = ({ customerId }) => {
           return (
             <tr key={index}>
               <td scope="row">{index + 1}</td>
-              <td>{customerContact.contactId}</td>
+              <td>{`${customerContact.contact?.firstName} ${customerContact.contact?.lastName}`}</td>
               <td>
                 <button
                   className='btn btn-danger'
+                  onClick={() => deleteContact(customerContact.contactId)}
+                  disabled={status === 'pending'}
                 >
                   Delete
                 </button>
