@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-const Table = ({ contacts }) => {
+const ContactTable = ({ contacts }) => {
   return (
     <table className="table">
       <thead>
@@ -24,7 +24,7 @@ const Table = ({ contacts }) => {
   )
 }
 
-Table.propTypes = {
+ContactTable.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string
@@ -32,4 +32,4 @@ Table.propTypes = {
 }
 
 
-export default Table
+export default ContactTable

@@ -1,21 +1,10 @@
 import PropTypes from 'prop-types';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { deleteCustomerContact, fetchCustomerContacts } from './customerContatSlices';
-import { useContacts } from './Pages';
+import { useDispatch } from 'react-redux';
+import { deleteCustomerContact } from '../redux/customerContatSlices';
+import { useContacts, useCustomerContacts } from '../hooks/reduxHooks';
 
-export const useCustomerContacts = (customerId) => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(fetchCustomerContacts(customerId))
-  }, [dispatch, customerId])
-  const refetch = () => dispatch(fetchCustomerContacts(customerId))
-  const { data, status, error } = useSelector(state => state.customerContacts)
-  return { data, status, error, refetch }
-}
-
-const Table = ({ customerId }) => {
+const CustomerContactTable = ({ customerId }) => {
   const dispatch = useDispatch()
   // MB-TODO-DONE: Example response
   const { data, status, refetch } = useCustomerContacts(customerId)
@@ -67,9 +56,9 @@ const Table = ({ customerId }) => {
   )
 }
 
-Table.propTypes = {
+CustomerContactTable.propTypes = {
   customerId: PropTypes.string.isRequired
 }
 
 
-export default Table
+export default CustomerContactTable

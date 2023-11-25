@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import MBTodo from './MBTodo';
 import { useState } from 'react';
 
-const Table = ({ customers }) => {
+const CustomerTable = ({ customers }) => {
   const navigate = useNavigate()
   const [filters, setFilters] = useState(() => {
     const storageFilters = window.localStorage.getItem('customerTableFilters')
@@ -85,7 +85,7 @@ const Table = ({ customers }) => {
   )
 }
 
-Table.propTypes = {
+CustomerTable.propTypes = {
   customers: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
     country: PropTypes.string,
@@ -94,4 +94,4 @@ Table.propTypes = {
 }
 
 
-export default Table
+export default CustomerTable

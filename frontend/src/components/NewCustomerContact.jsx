@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { useCustomerContacts } from './CustomerContactTable';
-import { useContacts } from './Pages';
 import { useState } from 'react';
-import { addCustomerContact } from './customerContatSlices';
+import { addCustomerContact } from '../redux/customerContatSlices';
 import { useDispatch } from 'react-redux';
+import { useContacts } from '../hooks/reduxHooks';
 
 const NewCustomerContact = ({ customerId }) => {
   const dispatch = useDispatch()

@@ -1,6 +1,6 @@
 import express from 'express';
 import { Contacts, CustomerContacts, Customers } from './models.js';
-import { NotFound, NotImplemented } from './errorHandler.js';
+import { NotFound } from './errorHandler.js';
 
 const routes = express.Router()
 
