@@ -123,5 +123,3 @@ export const createCustomer = createAsyncThunk(
     return result
   }
 )
-
-// MB-TODO: create action for creating customer contacts. NOTE: remember to add them to `customerSlice`
