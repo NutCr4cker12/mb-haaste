@@ -1,6 +1,5 @@
 import './App.css';
 import ErrorPage from './ErrorPage';
-import { Contacts, Customer, Customers } from './Pages';
 import mbLogo from './assets/mb-logo.svg';
 
 import {
@@ -11,6 +10,9 @@ import {
   Routes,
   createBrowserRouter
 } from "react-router-dom";
+import { Customers } from './pages/customers';
+import { Customer } from './pages/customer';
+import { Contacts } from './pages/contacts';
 
 const Root = () => {
   return (
