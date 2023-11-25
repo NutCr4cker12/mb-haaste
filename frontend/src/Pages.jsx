@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchCustomerById, fetchCustomers } from './customerSlices'
 import { fetchContacts } from './contactSlices'
 import NewCustomer from './NewCustomer'
+import NewCustomerContact from './NewCustomerContact'
 
 const useCustomers = () => {
   const dispatch = useDispatch()
@@ -31,7 +32,7 @@ const useCustomer = (id) => {
   return { data: customer, status, error }
 }
 
-const useContacts = () => {
+export const useContacts = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(fetchContacts())
@@ -101,6 +102,7 @@ export const Customer = () => {
           </form>
           <div>
             <p className='fw-bold'>Customer contacts</p>
+            <NewCustomerContact customerId={customerId} />
             <MBTodo
               isCompleted={false}
               task='Continue CustomerContact table implementation' />
