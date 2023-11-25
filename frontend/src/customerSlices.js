@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { client } from './api'
+import { addDefaultThunkCases } from './extraReducer'
 
 const initialState = {
   data: [],
@@ -14,105 +15,23 @@ const customersSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchCustomers.pending, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'idle') {
-          state.status = 'pending'
-          state.currentRequestId = requestId
+    addDefaultThunkCases(builder, fetchCustomers, (state, action) => { 
+      return action.payload
+    })
+    addDefaultThunkCases(builder, fetchCustomerById, (state, action) => {
+      return state.data.concat(action.payload)
+    })
+    addDefaultThunkCases(builder, createCustomer, (state, action) => {
+      return state.data.concat(action.payload)
+    })
+    addDefaultThunkCases(builder, updateCustomer, (state, action) => {
+      return state.data.map(customer => {
+        if (customer.id !== action.payload.id) {
+          return customer
         }
+        return action.payload
       })
-      .addCase(fetchCustomers.fulfilled, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.data = action.payload
-          state.currentRequestId = null
-        }
-      })
-      .addCase(fetchCustomers.rejected, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.error = action.error
-          state.currentRequestId = null
-        }
-      })
-      .addCase(fetchCustomerById.pending, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'idle') {
-          state.status = 'pending'
-          state.currentRequestId = requestId
-        }
-      })
-      .addCase(fetchCustomerById.fulfilled, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.data = state.data.concat(action.payload)
-          state.currentRequestId = null
-        }
-      })
-      .addCase(fetchCustomerById.rejected, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.error = action.error
-          state.currentRequestId = null
-        }
-      })
-      .addCase(createCustomer.pending, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'idle') {
-          state.status = 'pending'
-          state.currentRequestId = requestId
-        }
-      })
-      .addCase(createCustomer.fulfilled, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.data = state.data.concat(action.payload)
-          state.currentRequestId = null
-        }
-      })
-      .addCase(createCustomer.rejected, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.error = action.error
-          state.currentRequestId = null
-        }
-      })
-      .addCase(updateCustomer.pending, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'idle') {
-          state.status = 'pending'
-          state.currentRequestId = requestId
-        }
-      })
-      .addCase(updateCustomer.fulfilled, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          console.log("Action data", state.data)
-          state.data = state.data.map(customer => {
-            if (customer.id !== action.payload.id) {
-              return customer
-            }
-            return action.payload
-          })
-          state.currentRequestId = null
-        }
-      })
-      .addCase(updateCustomer.rejected, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.error = action.error
-          state.currentRequestId = null
-        }
-      })
+    })
   },
 })
 export const customerReducer = customersSlice.reducer

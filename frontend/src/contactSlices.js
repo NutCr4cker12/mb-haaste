@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { client } from './api'
+import { addDefaultThunkCases } from './extraReducer'
 
 const initialState = {
   data: [],
@@ -14,30 +15,7 @@ const contactsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchContacts.pending, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'idle') {
-          state.status = 'pending'
-          state.currentRequestId = requestId
-        }
-      })
-      .addCase(fetchContacts.fulfilled, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.data = action.payload
-          state.currentRequestId = null
-        }
-      })
-      .addCase(fetchContacts.rejected, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.error = action.error
-          state.currentRequestId = null
-        }
-      })
+    addDefaultThunkCases(builder, fetchContacts, (state, action) => action.payload)
   }
 })
 export const contactReducer = contactsSlice.reducer

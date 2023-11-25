@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { client } from './api'
+import { addDefaultThunkCases } from './extraReducer'
 
 const initialState = {
   data: [],
@@ -13,83 +14,22 @@ const customerContactsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchCustomerContacts.pending, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'idle') {
-          state.status = 'pending'
-          state.currentRequestId = requestId
-        }
-      })
-      .addCase(fetchCustomerContacts.fulfilled, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.data = action.payload
-          state.currentRequestId = null
-        }
-      })
-      .addCase(fetchCustomerContacts.rejected, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.error = action.error
-          state.currentRequestId = null
-        }
-      })
-      .addCase(addCustomerContact.pending, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'idle') {
-          state.status = 'pending'
-          state.currentRequestId = requestId
-        }
-      })
-      .addCase(addCustomerContact.fulfilled, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.data = state.data.concat(action.payload)
-          state.currentRequestId = null
-        }
-      })
-      .addCase(addCustomerContact.rejected, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.error = action.error
-          state.currentRequestId = null
-        }
-      })
-      .addCase(deleteCustomerContact.pending, (state, action) => {
-        const { requestId } = action.meta
-        if (state.status === 'idle') {
-          state.status = 'pending'
-          state.currentRequestId = requestId
-        }
-      })
-      .addCase(deleteCustomerContact.fulfilled, (state, action) => {
-        const { requestId } = action.meta
-        if (state.status === 'pending' && state.currentRequestId === requestId) {
-          const { customerId, contactId } = action.payload
-          state.status = 'idle'
-          state.data = state.data.filter(n => !(n.customerId === customerId && n.contactId === contactId))
-          state.currentRequestId = null
-        }
-      })
-      .addCase(deleteCustomerContact.rejected, (state, action) => {
-        const { requestId } = action.meta
-        if(state.status === 'pending' && state.currentRequestId === requestId) {
-          state.status = 'idle'
-          state.error = action.error
-          state.currentRequestId = null
-        }
-      })
+    addDefaultThunkCases(builder, fetchCustomerContacts, (state, action) => {
+      return action.payload
+    })
+    addDefaultThunkCases(builder, addCustomerContact, (state, action) => {
+      return state.data.concat(action.payload)
+    })
+    addDefaultThunkCases(builder, deleteCustomerContact, (state, action) => {
+      const { customerId, contactId } = action.payload
+      return state.data.filter(n => !(n.customerId === customerId && n.contactId === contactId))
+    })
   }
 })
 
 export const customerContantsReducer = customerContactsSlice.reducer
 
-// MB-TODO: create action for creating customer contacts. NOTE: remember to add them to `customerSlice`
+// MB-TODO-DONE: create action for creating customer contacts. NOTE: remember to add them to `customerSlice`
 export const fetchCustomerContacts = createAsyncThunk(
   'customerContacts',
   async (customerId) => {

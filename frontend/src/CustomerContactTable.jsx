@@ -18,7 +18,7 @@ export const useCustomerContacts = (customerId) => {
 const Table = ({ customerId }) => {
   const dispatch = useDispatch()
   // MB-TODO-DONE: Example response
-  const { data, status, error, refetch } = useCustomerContacts(customerId)
+  const { data, status, refetch } = useCustomerContacts(customerId)
   const { data: contacts } = useContacts()
 
   
