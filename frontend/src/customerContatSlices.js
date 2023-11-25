@@ -37,6 +37,29 @@ const customerContactsSlice = createSlice({
           state.currentRequestId = null
         }
       })
+      .addCase(addCustomerContact.pending, (state, action) => {
+        const { requestId } = action.meta
+        if(state.status === 'idle') {
+          state.status = 'pending'
+          state.currentRequestId = requestId
+        }
+      })
+      .addCase(addCustomerContact.fulfilled, (state, action) => {
+        const { requestId } = action.meta
+        if(state.status === 'pending' && state.currentRequestId === requestId) {
+          state.status = 'idle'
+          state.data = state.data.concat(action.payload)
+          state.currentRequestId = null
+        }
+      })
+      .addCase(addCustomerContact.rejected, (state, action) => {
+        const { requestId } = action.meta
+        if(state.status === 'pending' && state.currentRequestId === requestId) {
+          state.status = 'idle'
+          state.error = action.error
+          state.currentRequestId = null
+        }
+      })
   }
 })
 
@@ -66,3 +89,4 @@ export const addCustomerContact = createAsyncThunk(
     return result
   }
 )
+

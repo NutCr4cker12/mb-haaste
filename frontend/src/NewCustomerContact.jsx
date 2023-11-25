@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 const NewCustomerContact = ({ customerId }) => {
   const dispatch = useDispatch()
   const [selectedContactId, setSelectedContactId] = useState('')
-  const { data: customerContacts , refetch } = useCustomerContacts(customerId)
+  const { data: customerContacts } = useCustomerContacts(customerId)
   const { data: contacts } = useContacts()
 
   const customerContactIds = customerContacts.map(n => n.contactId)
@@ -25,7 +25,6 @@ const NewCustomerContact = ({ customerId }) => {
     }
 
     dispatch(addCustomerContact({ customerId, contactId: selectedContactId }))
-    refetch()
   }
 
   return (
